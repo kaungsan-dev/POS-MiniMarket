@@ -1,0 +1,57 @@
+Category & Product (KaungSan)
+Category => CRUD (Admin)
+Product => CRUD (Admin)
+
+Category Tbl
+- Cat_ID
+- Category Name
+- Updated Date
+- Updated User
+- Created Date
+- Created User (Login_ID)
+
+Product Tbl
+- Product_ID
+- Product Name
+- Category Name (FK)
+- Price (datatype = float)
+- Qty => (Total Qty - Sell Qty = result)
+- Sell Qty (datatype = int)
+- Selled Date
+- Updated Date
+- Updated User
+- Created Date
+- Created User (Login_ID)
+==================================================================
+
+Reporting & Voucher (ThanMya)
+Daily Sell Report
+Sell Voucher Slip => Seller
+
+Daily Sell Tbl
+- Sell_ID
+- Product Name
+- Category Name
+- Price (datatype = float)
+- Sell Qty (datatype = int)
+- Selled Date
+- Cashier Name (Seller_ID)
+=================================================================
+
+Authentication  &  Authorization  (WinMyatAung)
+Login (Admin / Seller)
+Seller Account Create
+Seller => CUD display:none
+Check Stock List Report  => show (Total Qty , Sell Qty , result)
+
+Login Tbl
+- ID
+- Name
+- Email
+- Password
+- Created Date
+====================================================================
+
+
+
+

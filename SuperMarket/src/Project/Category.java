@@ -1,35 +1,41 @@
 package Project;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import javax.swing.SwingConstants;
 import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.util.Vector;
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.sql.*;
-import javax.swing.table.DefaultTableModel;
-
-import com.mysql.cj.protocol.Resultset;
-
-import net.proteanit.sql.DbUtils;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import net.proteanit.sql.DbUtils;
+
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 public class Category extends JFrame {
 	
@@ -108,12 +114,12 @@ public class Category extends JFrame {
 		categoryLal.setForeground(Color.BLUE);
 		categoryLal.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		categoryLal.setHorizontalAlignment(SwingConstants.CENTER);
-		categoryLal.setBounds(60, 103, 164, 37);
+		categoryLal.setBounds(60, 103, 164, 25);
 		contentPane.add(categoryLal);
 		
 		categoryField = new JTextField();
 		categoryField.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		categoryField.setBounds(251, 100, 218, 43);
+		categoryField.setBounds(221, 100, 218, 28);
 		contentPane.add(categoryField);
 		categoryField.setColumns(10);
 		
@@ -160,7 +166,7 @@ public class Category extends JFrame {
 			}
 		});
 		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		addBtn.setBounds(504, 100, 118, 43);
+		addBtn.setBounds(449, 104, 86, 25);
 		contentPane.add(addBtn);
 		
 		// Update Category
@@ -208,7 +214,7 @@ public class Category extends JFrame {
 			}
 		});
 		btnUpdate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnUpdate.setBounds(632, 100, 118, 43);
+		btnUpdate.setBounds(538, 104, 93, 25);
 		contentPane.add(btnUpdate);
 		
 		// Delete Category
@@ -254,7 +260,7 @@ public class Category extends JFrame {
 			}
 		});
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDelete.setBounds(758, 100, 118, 43);
+		btnDelete.setBounds(634, 104, 86, 25);
 		contentPane.add(btnDelete);
 		
 		JLabel allCategoryListLbl = new JLabel("All Category Lists");
@@ -300,5 +306,40 @@ public class Category extends JFrame {
 		categoryId.setBounds(70, 137, 74, 18);
 		categoryId.setVisible(false);
 		contentPane.add(categoryId);
+		
+		// Do Report
+		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			private JasperPrint jprint;
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					
+					//Open Connection
+					System.out.println("Connecting Database....");
+					Connection conn = DriverManager.getConnection(Url,User,Pass);
+					String sql = "select * from category";
+					
+					JasperDesign jdesign = JRXmlLoader.load("D:\\Dont_Delete\\KBTC\\JavaFinalProject\\SuperMarket\\src\\Project\\ReportCategory.jrxml");
+					
+					JRDesignQuery updateQuery = new JRDesignQuery();
+					updateQuery.setText(sql);
+					
+					jdesign.setQuery(updateQuery);
+					
+					JasperReport Jreport = JasperCompileManager.compileReport(jdesign);
+					JasperPrint jasperPrint = JasperFillManager.fillReport(Jreport, null, conn);
+					
+					JasperViewer.viewReport(jasperPrint, false);
+					
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, e2);
+				}
+			}
+		});
+		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnReport.setBounds(724, 104, 86, 25);
+		contentPane.add(btnReport);
 	}
 }

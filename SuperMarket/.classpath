@@ -8,5 +8,23 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/mysql-connector-java-8.0.11.jar"/>
 	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/rs2xml/rs2xml.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/bcprov-jdk15on-1.64.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/castor-core-1.4.1.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/castor-xml-1.4.1.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-beanutils-1.9.4.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-collections-3.2.2.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-collections4-4.2.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-digester-2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/ecj-3.21.0.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/itext-2.1.7.js8.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jackson-annotations-2.12.2.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jackson-core-2.12.2.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jackson-databind-2.12.2.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jasperreports-6.17.0.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/javax.inject-1.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="D:/Dont_Delete/KBTC/JavaFinalProject/jar_files/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

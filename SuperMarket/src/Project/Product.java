@@ -28,6 +28,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Product extends JFrame {
 	
@@ -41,7 +43,7 @@ public class Product extends JFrame {
 	private JTextField qtyTxtField;
 	private JTable productTbl;
 	private JComboBox productCatComboBox;
-	private JTextField productIDTxtField;
+	private JTextField productID;
 
 	/**
 	 * Launch the application.
@@ -194,11 +196,11 @@ public class Product extends JFrame {
 						// Data Fetch for FK to get Category_id
 						//select minimarket.category.category_id from minimarket.category where minimarket.category.category_name="Fruits";
 						//String sql2 = "select category_id from category where category_name ='"+CatCombo+"'";
-						String sql2 = "select category_id from category where category_name ='"+CatCombo+"'";
+						//String sql2 = "select category_id from category where category_name ='"+CatCombo+"'";
 						
 						// To Insert
-						String sql = "insert into product(product_name,category_id,price,qty,created_date)"
-								+ "values ('"+ProductName+"','"+sql2+"','"+Price+"','"+Qty+"','"+sqlTime+"')";
+						String sql = "insert into product(product_name,category_name,price,qty,created_date)"
+								+ "values ('"+ProductName+"','"+CatCombo+"','"+Price+"','"+Qty+"','"+sqlTime+"')";
 						
 						Statement stmt = conn.createStatement();
 						int result = stmt.executeUpdate(sql);
@@ -221,12 +223,97 @@ public class Product extends JFrame {
 		addBtn.setBounds(90, 148, 147, 29);
 		contentPane.add(addBtn);
 		
+		// Update Product
 		JButton updateBtn = new JButton("Update");
+		updateBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String productId = productID.getText();
+				String productName = productNameTxtField.getText();
+				String CatCombo = (String) productCatComboBox.getItemAt(productCatComboBox.getSelectedIndex());
+				String productPrice = priceTxtField.getText();
+				String productQty = qtyTxtField.getText();
+				
+				try {
+					java.util.Date date=new java.util.Date();
+			        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
+			        java.sql.Timestamp sqlTime=new java.sql.Timestamp(date.getTime());
+					
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					
+					//Open Connection
+					System.out.println("Connecting Database....");
+					Connection conn = DriverManager.getConnection(Url,User,Pass);
+					
+					//Execute Query
+					System.out.println("Insert Data To Table....");
+					
+					String sql = "update product set product_name='"+productName+"', category_name='"+CatCombo+"', price='"+productPrice+"', qty='"+productQty+"', created_date='"+sqlTime+"'where product_id = "+productId;
+					
+					
+					Statement stmt = conn.createStatement();
+					int result = stmt.executeUpdate(sql);
+					DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+					model.setRowCount(0);
+					SelectProduct();
+					
+					if(result == 1) {
+						JOptionPane.showMessageDialog(null, "Update Successful!", "Category Updated",JOptionPane.INFORMATION_MESSAGE);
+						productNameTxtField.setText("");
+						priceTxtField.setText("");
+						qtyTxtField.setText("");
+					}
+				} catch (Exception ex) {
+					System.out.println("Error " + ex);
+				}
+			}
+		});
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		updateBtn.setBounds(310, 148, 147, 29);
 		contentPane.add(updateBtn);
 		
+		// Delete Product
 		JButton deleteBtn = new JButton("Delete");
+		deleteBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(productID.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Missing Information", "Product",JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					try {
+						
+						Class.forName("com.mysql.cj.jdbc.Driver");
+						
+						//Open Connection
+						System.out.println("Connecting Database....");
+						Connection conn = DriverManager.getConnection(Url,User,Pass);
+						
+						String Pid = productID.getText();
+						
+						//Execute Query
+						System.out.println("Insert Data To Table....");
+						
+						String sql = "delete from product where product_id = "+Pid;
+						
+						
+						Statement stmt = conn.createStatement();
+						int result = stmt.executeUpdate(sql);
+						DefaultTableModel model = (DefaultTableModel) productTbl.getModel();
+						model.setRowCount(0);
+						SelectProduct();
+						
+						if(result == 1) {
+							JOptionPane.showMessageDialog(null, "Delete Successful!", "Category Deleted",JOptionPane.INFORMATION_MESSAGE);
+							productNameTxtField.setText("");
+							priceTxtField.setText("");
+							qtyTxtField.setText("");
+						}
+					}
+					catch(Exception ex) {
+						System.out.println("Error " + ex);
+					}
+				}
+			}
+		});
 		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		deleteBtn.setBounds(527, 148, 147, 29);
 		contentPane.add(deleteBtn);
@@ -241,7 +328,20 @@ public class Product extends JFrame {
 		scrollPane.setBounds(37, 233, 686, 241);
 		contentPane.add(scrollPane);
 		
+		//Select Row Table
 		productTbl = new JTable();
+		productTbl.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				DefaultTableModel model = (DefaultTableModel)productTbl.getModel();
+				int index = productTbl.getSelectedRow();
+				productID.setText(model.getValueAt(index, 0).toString());
+				productNameTxtField.setText(model.getValueAt(index, 1).toString());
+				productCatComboBox.setSelectedItem(model.getValueAt(index, 2));
+				priceTxtField.setText(model.getValueAt(index, 3).toString());
+				qtyTxtField.setText(model.getValueAt(index, 4).toString());
+			}
+		});
 		productTbl.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -253,10 +353,10 @@ public class Product extends JFrame {
 		productTbl.getColumnModel().getColumn(2).setPreferredWidth(103);
 		scrollPane.setViewportView(productTbl);
 		
-		productIDTxtField = new JTextField();
-		productIDTxtField.setBounds(199, 30, 86, 20);
-		contentPane.add(productIDTxtField);
-		productIDTxtField.setColumns(10);
-		productIDTxtField.setVisible(false);
+		productID = new JTextField();
+		productID.setBounds(199, 30, 86, 20);
+		contentPane.add(productID);
+		productID.setColumns(10);
+		productID.setVisible(false);
 	}
 }

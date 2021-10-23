@@ -360,3 +360,6 @@ public class Product extends JFrame {
 		productID.setVisible(false);
 	}
 }
+
+
+// test cmd line kajfiwejiorjwero

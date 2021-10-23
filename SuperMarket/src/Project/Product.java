@@ -1,6 +1,7 @@
 package Project;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -113,6 +114,7 @@ public class Product extends JFrame {
 		setBounds(100, 100, 781, 524);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(177, 216, 183));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
@@ -124,50 +126,52 @@ public class Product extends JFrame {
 		
 		JLabel productLabel = new JLabel("Product Name");
 		productLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		productLabel.setBounds(37, 61, 147, 29);
+		productLabel.setBounds(188, 61, 100, 29);
 		contentPane.add(productLabel);
 		
 		productNameTxtField = new JTextField();
 		productNameTxtField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		productNameTxtField.setBounds(199, 61, 207, 29);
+		productNameTxtField.setBounds(298, 61, 156, 29);
 		contentPane.add(productNameTxtField);
 		productNameTxtField.setColumns(10);
 		
 		JLabel priceLbl = new JLabel("Price");
 		priceLbl.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		priceLbl.setBounds(428, 61, 147, 29);
+		priceLbl.setBounds(464, 61, 74, 29);
 		contentPane.add(priceLbl);
 		
 		priceTxtField = new JTextField();
 		priceTxtField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		priceTxtField.setColumns(10);
-		priceTxtField.setBounds(505, 61, 207, 29);
+		priceTxtField.setBounds(548, 61, 162, 29);
 		contentPane.add(priceTxtField);
 		
 		JLabel productCatLbl = new JLabel("Category");
 		productCatLbl.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		productCatLbl.setBounds(37, 108, 147, 29);
+		productCatLbl.setBounds(202, 101, 86, 29);
 		contentPane.add(productCatLbl);
 		
 		productCatComboBox = new JComboBox();
 		productCatComboBox.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		productCatComboBox.setBounds(199, 101, 207, 37);
+		productCatComboBox.setBounds(298, 97, 156, 29);
 		contentPane.add(productCatComboBox);
 		CategoryComboBox();
 		
 		JLabel lblQuantity = new JLabel("Quantity");
 		lblQuantity.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblQuantity.setBounds(428, 101, 147, 29);
+		lblQuantity.setBounds(464, 101, 79, 29);
 		contentPane.add(lblQuantity);
 		
 		qtyTxtField = new JTextField();
 		qtyTxtField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		qtyTxtField.setColumns(10);
-		qtyTxtField.setBounds(505, 101, 207, 29);
+		qtyTxtField.setBounds(548, 101, 162, 29);
 		contentPane.add(qtyTxtField);
 		
 		// Create Product
 		JButton addBtn = new JButton("Add");
+		addBtn.setBackground(new Color(	0, 139, 139));
+		addBtn.setForeground(Color.white);
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String ProductName = productNameTxtField.getText();
@@ -220,11 +224,13 @@ public class Product extends JFrame {
 			}
 		});
 		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		addBtn.setBounds(90, 148, 147, 29);
+		addBtn.setBounds(284, 148, 100, 29);
 		contentPane.add(addBtn);
 		
 		// Update Product
 		JButton updateBtn = new JButton("Update");
+		updateBtn.setBackground(new Color(	0, 139, 139));
+		updateBtn.setForeground(Color.white);
 		updateBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String productId = productID.getText();
@@ -268,11 +274,13 @@ public class Product extends JFrame {
 			}
 		});
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		updateBtn.setBounds(310, 148, 147, 29);
+		updateBtn.setBounds(416, 148, 100, 29);
 		contentPane.add(updateBtn);
 		
 		// Delete Product
 		JButton deleteBtn = new JButton("Delete");
+		deleteBtn.setBackground(new Color(	0, 139, 139));
+		deleteBtn.setForeground(Color.white);
 		deleteBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(productID.getText().isEmpty()) {
@@ -315,7 +323,7 @@ public class Product extends JFrame {
 			}
 		});
 		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		deleteBtn.setBounds(527, 148, 147, 29);
+		deleteBtn.setBounds(548, 148, 108, 29);
 		contentPane.add(deleteBtn);
 		
 		JLabel lblNewLabel_1 = new JLabel("Products List");
@@ -325,7 +333,7 @@ public class Product extends JFrame {
 		contentPane.add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(37, 233, 686, 241);
+		scrollPane.setBounds(150, 233, 605, 241);
 		contentPane.add(scrollPane);
 		
 		//Select Row Table
@@ -354,12 +362,30 @@ public class Product extends JFrame {
 		scrollPane.setViewportView(productTbl);
 		
 		productID = new JTextField();
-		productID.setBounds(199, 30, 86, 20);
+		productID.setBounds(188, 133, 86, 20);
 		contentPane.add(productID);
 		productID.setColumns(10);
 		productID.setVisible(false);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(	118, 185, 71));
+		panel.setBounds(0, 50, 143, 435);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JButton menuProductBtn = new JButton("Categories");
+		menuProductBtn.setFont(new Font("Arial", Font.PLAIN, 18));
+		menuProductBtn.setBounds(10, 43, 123, 33);
+		panel.add(menuProductBtn);
+		
+		JButton menuProductBtn_1 = new JButton("Products");
+		menuProductBtn_1.setFont(new Font("Arial", Font.PLAIN, 18));
+		menuProductBtn_1.setBounds(10, 85, 123, 33);
+		panel.add(menuProductBtn_1);
+		
+		JButton btnLogout = new JButton("Logout");
+		btnLogout.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnLogout.setBounds(10, 391, 123, 33);
+		panel.add(btnLogout);
 	}
 }
-
-
-// test cmd line kajfiwejiorjwero

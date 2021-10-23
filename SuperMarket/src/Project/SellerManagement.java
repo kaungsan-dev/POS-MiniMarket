@@ -1,4 +1,4 @@
-package supermarket;
+package Project;
 
 import java.awt.BorderLayout;
 
@@ -45,7 +45,7 @@ public class SellerManagement extends JFrame {
 	private JTextField sellEmail;
 	private JTextField sellPass;
 
-	private static String Url = "jdbc:mysql://localhost:3306/Supermarket?useSSL=false";
+	private static String Url = "jdbc:mysql://localhost:3306/minimarket?useSSL=false";
 	private static String User = "root";
 	private static String Password = "232209";
 	DefaultTableModel defaultTableModel;
@@ -136,8 +136,18 @@ public class SellerManagement extends JFrame {
 		
 		JButton logout = new JButton("Logout");
 		logout.setFont(new Font("Arial", Font.PLAIN, 18));
-		logout.setBounds(15, 606, 115, 29);
+		logout.setBounds(10, 606, 124, 29);
 		panel.add(logout);
+		
+		JButton btnProduct = new JButton("Categories");
+		btnProduct.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnProduct.setBounds(10, 69, 124, 29);
+		panel.add(btnProduct);
+		
+		JButton btnProducts = new JButton("Products");
+		btnProducts.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnProducts.setBounds(10, 110, 124, 29);
+		panel.add(btnProducts);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(163, 82, 802, 651);

@@ -1,5 +1,7 @@
 package Project;
 
+
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -8,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -17,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -27,19 +33,35 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import javax.swing.JComboBox;
 import java.awt.SystemColor;
+import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
 
-public class login extends JFrame {
-	 private static  String Url = "jdbc:mysql://localhost:3306";
-	 private static  String User="root";
-	 private static  String Pw="107449";
-	private JTextField txtPassword;
-    Connection con;
+public class Login extends JFrame {
+	private JPanel contentPane;
+	private JTextField email;
+	
+	private static String Url = "jdbc:mysql://localhost:3306/minimarket?useSSL=false";
+	private static String User = "root";
+	private static String Password = "admin";
+	private JPasswordField password;
+	private JComboBox Role;
+	
+	private static String Email;
+	
+    public static String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
+	}
+
+	Connection con;
     Statement stmt;
     ResultSet rs;
-    private JTextField txtName;
 	void Clear(){
-		txtName.setText(null);
-		txtPassword.setText(null);
+		email.setText(null);
+		password.setText(null);
 	}
 	
 	public static void main(String[] args) {
@@ -47,7 +69,7 @@ public class login extends JFrame {
 			public void run() {
 				try {
 					
-					login frame = new login();
+					Login frame = new Login();
 					frame.setVisible(true);
 					frame.setResizable(false);
 					frame.setLocationRelativeTo(null);
@@ -63,15 +85,15 @@ public class login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public login() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(login.class.getResource("/images/iconimage.png")));
+	public Login() {
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(login.class.getResource("/images/iconimage.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 745, 499);
+		setBounds(100, 100, 817, 559);
 		getContentPane().setLayout(null);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.PINK);
-		panel_1.setBounds(351, 0, 376, 452);
+		panel_1.setBackground(new Color(41,70,91));
+		panel_1.setBounds(351, 0, 440, 509);
 		getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -81,57 +103,79 @@ public class login extends JFrame {
 		
 		JLabel lblLogIn = new JLabel("LOGIN");
 		lblLogIn.setFont(new Font("Sylfaen", Font.BOLD, 27));
-		lblLogIn.setBounds(127, 5, 105, 29);
+		lblLogIn.setForeground(Color.WHITE);
+		lblLogIn.setBounds(155, 11, 105, 29);
 		panel_1.add(lblLogIn);
 		
-		JLabel lblUsername = new JLabel("USERNAME");
-		lblUsername.setFont(new Font("Sylfaen", Font.PLAIN, 20));
-		lblUsername.setBounds(12, 194, 119, 29);
-		panel_1.add(lblUsername);
+		JLabel txtEmail = new JLabel("EMAIL");
+		txtEmail.setFont(new Font("Arial", Font.PLAIN, 18));
+		txtEmail.setForeground(Color.WHITE);
+		txtEmail.setBounds(15, 151, 119, 29);
+		panel_1.add(txtEmail);
 		
-		JLabel lblPassword = new JLabel("PASSWORD\r\n");
-		lblPassword.setFont(new Font("Sylfaen", Font.PLAIN, 20));
-		lblPassword.setBounds(12, 256, 119, 29);
-		panel_1.add(lblPassword);
+		JLabel txtPassword = new JLabel("PASSWORD\r\n");
+		txtPassword.setFont(new Font("Arial", Font.PLAIN, 18));
+		txtPassword.setForeground(Color.WHITE);
+		txtPassword.setBounds(15, 191, 119, 29);
+		panel_1.add(txtPassword);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(-355, 18, 355, 539);
 		panel_1.add(panel);
-		txtPassword = new JTextField();
-		txtPassword.setColumns(10);
-		txtPassword.setBounds(172, 249, 192, 36);
-		panel_1.add(txtPassword);
 		JButton btnLogin = new JButton("Log in\r\n");
-		btnLogin.setForeground(Color.BLACK);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try{
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection conn=DriverManager.getConnection(Url, User, Pw);
-					String Name=txtName.getText().trim(); 
-			        String Password=txtPassword.getText().trim(); 
-			        String sql="SELECT * FROM login where name='"+Name+"' and password='"+Password+"'"; 
-			        stmt=conn.createStatement();
-			        rs=stmt.executeQuery(sql);
-			            if(rs.next()) 
-			            {   
-			                new FamilySupermarket().setVisible(true);
-			            }
-			        else 
-			            { 
-			                new ErrorMessage().setVisible(true);
-			                txtName.requestFocus();
-			            }         
+		btnLogin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(Role.getSelectedItem().toString().equals("Admin")){
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					System.out.println("Connecting To Database");
+					
+					Connection conn = DriverManager.getConnection(Url, User, Password);
+					String Query = "select * from register where email ='"+email.getText()+"' and password='"+password.getText()+"'";
+					Statement stmt = conn.createStatement();
+					ResultSet rs = stmt.executeQuery(Query);
+					if(rs.next()){
+						Email = email.getText();
+						new SellerManagement().setVisible(true);
+						dispose();
+						
+					}else{
+						JOptionPane.showMessageDialog(null, "Wrong Username or Password");
+					}
+				} catch (Exception e) {
+					System.out.println(e);
 				}
-				catch(Exception q){
-					q.printStackTrace();
-				}
-				
 			}
+			else{
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					System.out.println("Connecting To Database");
+					
+					Connection conn = DriverManager.getConnection(Url, User, Password);
+					String Query = "select * from register where email ='"+email.getText()+"' and password='"+password.getText()+"'";
+					Statement stmt = conn.createStatement();
+					ResultSet rs = stmt.executeQuery(Query);
+					if(rs.next()){
+						Email = email.getText();
+						new Selling().setVisible(true);
+						dispose();
+					}
+					else{
+						JOptionPane.showMessageDialog(null, "Wrong Username or Password");
+					}
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
+		}
 		});
-		btnLogin.setBackground(Color.LIGHT_GRAY);
-		btnLogin.setFont(new Font("Sylfaen", Font.BOLD | Font.ITALIC, 20));
-		btnLogin.setBounds(44, 352, 113, 72);
+		
+		btnLogin.setForeground(Color.BLACK);
+			
+		btnLogin.setBackground(new Color(173, 239, 209));
+		btnLogin.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnLogin.setBounds(60, 256, 113, 72);
 		panel_1.add(btnLogin);
 		
 		JButton btnCancel = new JButton("Cancel");
@@ -140,37 +184,65 @@ public class login extends JFrame {
 				Clear();
 			}
 		});
-		btnCancel.setFont(new Font("Sylfaen", Font.BOLD | Font.ITALIC, 20));
-		btnCancel.setBackground(Color.LIGHT_GRAY);
-		btnCancel.setBounds(226, 352, 113, 72);
+		btnCancel.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnCancel.setBackground(new Color(173, 239, 209));;
+		btnCancel.setBounds(251, 256, 113, 72);
 		panel_1.add(btnCancel);
 		
-		txtName = new JTextField();
-		txtName.setColumns(10);
-		txtName.setBounds(172, 187, 192, 36);
-		panel_1.add(txtName);
+		email = new JTextField();
+		email.setFont(new Font("Arial", Font.PLAIN, 18));
+		email.setColumns(10);
+		email.setBounds(172, 147, 192, 36);
+		panel_1.add(email);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		comboBox.addItem("Admin");
-		comboBox.addItem("User");
-		comboBox.setBounds(172, 138, 192, 36);
-		panel_1.add(comboBox);
+		Role = new JComboBox();
+		Role.setFont(new Font("Arial", Font.PLAIN, 18));
+		Role.addItem("Admin");
+		Role.addItem("Seller");
+		Role.setBounds(172, 100, 192, 36);
+		panel_1.add(Role);
+		
+		password = new JPasswordField();
+		password.setFont(new Font("Arial", Font.PLAIN, 18));
+		password.setBounds(172, 194, 192, 36);
+		panel_1.add(password);
+		
+		JLabel lblNewLabel = new JLabel("If you haven't account!");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setForeground(Color.WHITE);
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel.setBounds(62, 360, 342, 29);
+		panel_1.add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("Register");
+		lblNewLabel_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				new Register().setVisible(true);
+			}
+			
+		});
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1.setForeground(Color.CYAN);
+		lblNewLabel_1.setBounds(188, 388, 92, 29);
+		panel_1.add(lblNewLabel_1);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(10, 348, 420, 14);
+		panel_1.add(separator);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(Color.LIGHT_GRAY);
-		panel_2.setBounds(0, 0, 351, 452);
+		panel_2.setBackground(new Color(173, 239, 209));
+		panel_2.setBounds(0, 0, 351, 509);
 		getContentPane().add(panel_2);
 		panel_2.setLayout(null);
-		
-		JLabel label_2 = new JLabel("");
-		label_2.setIcon(new ImageIcon("C:\\Users\\ASUS\\Desktop\\wel2.png"));
-		label_2.setBounds(22, 72, 302, 81);
-		panel_2.add(label_2);
+	
 		
 		JLabel label_1 = new JLabel("");
-		label_1.setIcon(new ImageIcon(login.class.getResource("/images/FamilyLogo.png")));
-		label_1.setBounds(22, 187, 302, 222);
+		label_1.setIcon(new ImageIcon("D:\\Dont_Delete\\KBTC\\JavaFinalProject\\login.png"));
+		label_1.setBounds(15, 155, 464, 196);
 		panel_2.add(label_1);
 	}
 }

@@ -25,6 +25,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import net.proteanit.sql.DbUtils;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JRDesignQuery;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.ActionListener;
@@ -184,6 +193,7 @@ public class Product extends JFrame {
 				}
 				else {
 					try{
+						String Email = Login.getEmail();
 						java.util.Date date=new java.util.Date();
 				        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
 				        java.sql.Timestamp sqlTime=new java.sql.Timestamp(date.getTime());
@@ -203,8 +213,8 @@ public class Product extends JFrame {
 						//String sql2 = "select category_id from category where category_name ='"+CatCombo+"'";
 						
 						// To Insert
-						String sql = "insert into product(product_name,category_name,price,qty,created_date)"
-								+ "values ('"+ProductName+"','"+CatCombo+"','"+Price+"','"+Qty+"','"+sqlTime+"')";
+						String sql = "insert into product(product_name,category_name,price,qty,created_date,created_user)"
+								+ "values ('"+ProductName+"','"+CatCombo+"','"+Price+"','"+Qty+"','"+sqlTime+"','"+Email+"')";
 						
 						Statement stmt = conn.createStatement();
 						int result = stmt.executeUpdate(sql);
@@ -224,7 +234,7 @@ public class Product extends JFrame {
 			}
 		});
 		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		addBtn.setBounds(284, 148, 100, 29);
+		addBtn.setBounds(188, 148, 100, 29);
 		contentPane.add(addBtn);
 		
 		// Update Product
@@ -274,7 +284,7 @@ public class Product extends JFrame {
 			}
 		});
 		updateBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		updateBtn.setBounds(416, 148, 100, 29);
+		updateBtn.setBounds(327, 148, 100, 29);
 		contentPane.add(updateBtn);
 		
 		// Delete Product
@@ -323,7 +333,7 @@ public class Product extends JFrame {
 			}
 		});
 		deleteBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		deleteBtn.setBounds(548, 148, 108, 29);
+		deleteBtn.setBounds(454, 148, 108, 29);
 		contentPane.add(deleteBtn);
 		
 		JLabel lblNewLabel_1 = new JLabel("Products List");
@@ -362,7 +372,7 @@ public class Product extends JFrame {
 		scrollPane.setViewportView(productTbl);
 		
 		productID = new JTextField();
-		productID.setBounds(188, 133, 86, 20);
+		productID.setBounds(188, 36, 86, 20);
 		contentPane.add(productID);
 		productID.setColumns(10);
 		productID.setVisible(false);
@@ -373,19 +383,94 @@ public class Product extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
+		// Redirect To Category Page
 		JButton menuProductBtn = new JButton("Categories");
+		menuProductBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new Category().setVisible(true);
+			}
+		});
 		menuProductBtn.setFont(new Font("Arial", Font.PLAIN, 18));
-		menuProductBtn.setBounds(10, 43, 123, 33);
+		menuProductBtn.setBounds(10, 55, 123, 33);
 		panel.add(menuProductBtn);
 		
-		JButton menuProductBtn_1 = new JButton("Products");
-		menuProductBtn_1.setFont(new Font("Arial", Font.PLAIN, 18));
-		menuProductBtn_1.setBounds(10, 85, 123, 33);
-		panel.add(menuProductBtn_1);
-		
 		JButton btnLogout = new JButton("Logout");
+		btnLogout.setForeground(Color.WHITE);
+		btnLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+                // JOptionPane.setRootFrame(null);
+                if (a == JOptionPane.YES_OPTION) {
+                    dispose();
+                    new Login().setVisible(true);
+                }
+			}
+		});
 		btnLogout.setFont(new Font("Arial", Font.PLAIN, 18));
 		btnLogout.setBounds(10, 391, 123, 33);
+		btnLogout.setBackground(new Color(0, 139, 139));
 		panel.add(btnLogout);
+		
+		// Redirect To Manage Seller
+		JButton btnSeller = new JButton("Seller");
+		btnSeller.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new SellerManagement().setVisible(true);
+			}
+		});
+		btnSeller.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnSeller.setBounds(10, 11, 123, 33);
+		panel.add(btnSeller);
+		
+		// Redirect To SellList Page
+		JButton menuProductBtn_1_1 = new JButton("SellList");
+		menuProductBtn_1_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new SellList().setVisible(true);
+			}
+		});
+		menuProductBtn_1_1.setFont(new Font("Arial", Font.PLAIN, 18));
+		menuProductBtn_1_1.setBounds(10, 99, 123, 33);
+		panel.add(menuProductBtn_1_1);
+		
+		JButton btnReport = new JButton("Report");
+		btnReport.addActionListener(new ActionListener() {
+			private JasperPrint jprint;
+			
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					
+					//Open Connection
+					System.out.println("Connecting Database....");
+					Connection conn = DriverManager.getConnection(Url,User,Pass);
+					String sql = "select * from product";
+					
+					JasperDesign jdesign = JRXmlLoader.load("D:\\Dont_Delete\\KBTC\\JavaFinalProject\\SuperMarket\\src\\Project\\StockReport.jrxml");
+					
+					JRDesignQuery updateQuery = new JRDesignQuery();
+					updateQuery.setText(sql);
+					
+					jdesign.setQuery(updateQuery);
+					
+					JasperReport Jreport = JasperCompileManager.compileReport(jdesign);
+					JasperPrint jasperPrint = JasperFillManager.fillReport(Jreport, null, conn);
+					
+					JasperViewer.viewReport(jasperPrint, false);
+					
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, e2);
+				}
+			}
+		});
+		btnReport.setForeground(Color.WHITE);
+		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnReport.setBackground(new Color(0, 139, 139));
+		btnReport.setBounds(592, 148, 108, 29);
+		contentPane.add(btnReport);
 	}
 }

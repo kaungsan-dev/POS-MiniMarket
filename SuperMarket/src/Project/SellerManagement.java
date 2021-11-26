@@ -47,7 +47,7 @@ public class SellerManagement extends JFrame {
 
 	private static String Url = "jdbc:mysql://localhost:3306/minimarket?useSSL=false";
 	private static String User = "root";
-	private static String Password = "232209";
+	private static String Password = "admin";
 	DefaultTableModel defaultTableModel;
 	private JTable table;
 	private JTextField sellGender;
@@ -135,19 +135,47 @@ public class SellerManagement extends JFrame {
 		panel.setLayout(null);
 		
 		JButton logout = new JButton("Logout");
+		logout.setForeground(Color.WHITE);
 		logout.setFont(new Font("Arial", Font.PLAIN, 18));
 		logout.setBounds(10, 606, 124, 29);
+		logout.setBackground(new Color(0, 139, 139));
 		panel.add(logout);
 		
+		// Redirect To Category Page
 		JButton btnProduct = new JButton("Categories");
+		btnProduct.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new Category().setVisible(true);
+			}
+		});
 		btnProduct.setFont(new Font("Arial", Font.PLAIN, 18));
 		btnProduct.setBounds(10, 69, 124, 29);
 		panel.add(btnProduct);
 		
+		// Redirect To Product Page
 		JButton btnProducts = new JButton("Products");
+		btnProducts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new Product().setVisible(true);
+			}
+		});
 		btnProducts.setFont(new Font("Arial", Font.PLAIN, 18));
 		btnProducts.setBounds(10, 110, 124, 29);
 		panel.add(btnProducts);
+		
+		// Redirect To SellList Page
+		JButton btnSelllist = new JButton("SellList");
+		btnSelllist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new SellList().setVisible(true);
+			}
+		});
+		btnSelllist.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnSelllist.setBounds(10, 30, 124, 29);
+		panel.add(btnSelllist);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(163, 82, 802, 651);

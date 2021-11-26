@@ -50,6 +50,8 @@ public class Category extends JFrame {
 	private JTextField categoryId;
 	private JButton menuProductBtn_1;
 	private JButton menuProductBtn_2;
+	private JButton menuProductBtn_3;
+	private JButton btnSelllist;
 
 	/**
 	 * Launch the application.
@@ -141,6 +143,7 @@ public class Category extends JFrame {
 				}
 				else {
 				try{
+					String Email = Login.getEmail();
 					java.util.Date date=new java.util.Date();
 			        java.sql.Date sqlDate=new java.sql.Date(date.getTime());
 			        java.sql.Timestamp sqlTime=new java.sql.Timestamp(date.getTime());
@@ -153,8 +156,8 @@ public class Category extends JFrame {
 					
 					//Execute Query
 					System.out.println("Insert Data To Table .....");
-					String sql = "insert into category(category_name,created_date)"
-							+ "values ('"+categoryName+"', '"+sqlTime+"')";
+					String sql = "insert into category(category_name,created_date,created_user)"
+							+ "values ('"+categoryName+"', '"+sqlTime+"', '"+Email+"' )";
 					Statement stmt = conn.createStatement();
 					int result = stmt.executeUpdate(sql);
 					if(result == 1) {
@@ -171,7 +174,7 @@ public class Category extends JFrame {
 			}
 		});
 		addBtn.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		addBtn.setBounds(291, 144, 86, 41);
+		addBtn.setBounds(329, 144, 86, 31);
 		contentPane.add(addBtn);
 		
 		// Update Category
@@ -221,7 +224,7 @@ public class Category extends JFrame {
 			}
 		});
 		btnUpdate.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnUpdate.setBounds(398, 144, 93, 41);
+		btnUpdate.setBounds(436, 144, 93, 31);
 		contentPane.add(btnUpdate);
 		
 		// Delete Category
@@ -269,7 +272,7 @@ public class Category extends JFrame {
 			}
 		});
 		btnDelete.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnDelete.setBounds(511, 144, 86, 41);
+		btnDelete.setBounds(549, 144, 86, 31);
 		contentPane.add(btnDelete);
 		
 		JLabel allCategoryListLbl = new JLabel("All Category Lists");
@@ -350,7 +353,7 @@ public class Category extends JFrame {
 			}
 		});
 		btnReport.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		btnReport.setBounds(612, 145, 86, 40);
+		btnReport.setBounds(650, 145, 86, 30);
 		contentPane.add(btnReport);
 		
 		JPanel panel = new JPanel();
@@ -359,20 +362,58 @@ public class Category extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JButton menuProductBtn = new JButton("Categories");
-		menuProductBtn.setFont(new Font("Arial", Font.PLAIN, 18));
-		menuProductBtn.setBounds(10, 43, 144, 33);
-		panel.add(menuProductBtn);
-		
+		// Redirect To Product Page
 		menuProductBtn_1 = new JButton("Products");
+		menuProductBtn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new Product().setVisible(true);
+			}
+		});
 		menuProductBtn_1.setFont(new Font("Arial", Font.PLAIN, 18));
-		menuProductBtn_1.setBounds(10, 87, 144, 33);
+		menuProductBtn_1.setBounds(10, 80, 144, 33);
 		panel.add(menuProductBtn_1);
 		
 		menuProductBtn_2 = new JButton("Logout");
+		menuProductBtn_2.setForeground(Color.WHITE);
+		menuProductBtn_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int a = JOptionPane.showConfirmDialog(null, "Are you sure?");
+                // JOptionPane.setRootFrame(null);
+                if (a == JOptionPane.YES_OPTION) {
+                    dispose();
+                    new Login().setVisible(true);
+                }
+			}
+		});
 		menuProductBtn_2.setFont(new Font("Arial", Font.PLAIN, 18));
 		menuProductBtn_2.setBounds(10, 414, 144, 33);
+		menuProductBtn_2.setBackground(new Color(0, 139, 139));
 		panel.add(menuProductBtn_2);
+		
+		menuProductBtn_3 = new JButton("Seller");
+		menuProductBtn_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new SellerManagement().setVisible(true);
+			}
+		});
+		menuProductBtn_3.setFont(new Font("Arial", Font.PLAIN, 18));
+		menuProductBtn_3.setBounds(10, 36, 144, 33);
+		panel.add(menuProductBtn_3);
+		
+		// Redirect To SellList Page
+		btnSelllist = new JButton("SellList");
+		btnSelllist.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				new SellList().setVisible(true);
+			}
+		});
+		btnSelllist.setFont(new Font("Arial", Font.PLAIN, 18));
+		btnSelllist.setBounds(10, 124, 144, 33);
+		panel.add(btnSelllist);
 		
 		
 	}
